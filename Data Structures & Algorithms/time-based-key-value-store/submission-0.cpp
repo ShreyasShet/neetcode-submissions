@@ -1,0 +1,32 @@
+class TimeMap {
+    unordered_map<string, vector<pair<int, string>>> store;
+public:
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        store[key].push_back({timestamp, value});
+    }
+    
+    string get(string key, int timestamp) {
+        if (store.find(key) == store.end())
+            return "";
+
+        auto &arr = store[key];
+
+        auto it = upper_bound(
+            arr.begin(),
+            arr.end(),
+            timestamp,
+            [](int t, const pair<int, string>& p) {
+                return t < p.first;
+            }
+        );
+
+        if (it == arr.begin())
+            return "";
+
+        return prev(it)->second;
+    }
+};
